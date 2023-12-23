@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,8 +45,37 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     CurrencyConverterScreen()
+
                 }
             }
+
+
         }
     }
 }
+//@Composable
+//fun SimpleDropdownMenuExample() {
+//    var expanded by remember { mutableStateOf(false) }
+//    val items = listOf("Item 1", "Item 2", "Item 3")
+//    var selectedIndex by remember { mutableStateOf(0) }
+//
+//    Column(modifier = Modifier.padding(16.dp)) {
+//        Text("Selected item: ${items[selectedIndex]}",
+//            modifier = Modifier.clickable { expanded = true })
+//
+//        DropdownMenu(
+//            expanded = expanded,
+//            onDismissRequest = { expanded = false }
+//        ) {
+//            items.forEachIndexed { index, item ->
+//                DropdownMenuItem(
+//                    text = { Text(text=item) },
+//                    onClick = {
+//                        selectedIndex = index
+//                        expanded = false
+//                    }
+//                )
+//            }
+//        }
+//    }
+//}
