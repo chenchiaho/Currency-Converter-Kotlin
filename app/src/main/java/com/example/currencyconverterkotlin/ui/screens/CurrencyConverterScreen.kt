@@ -2,6 +2,7 @@
 
 package com.example.currencyconverterkotlin.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -26,14 +27,20 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.currencyconverterkotlin.network.RetrofitInstance
 import com.example.currencyconverterkotlin.ui.components.CurrencyDropdownMenu
 import com.example.currencyconverterkotlin.ui.theme.CurrencyConverterKotlinTheme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CurrencyConverterScreen() {
     // State variables
     var amount by remember { mutableStateOf("") }
-    var selectedCurrencyFrom by remember { mutableStateOf("") }
+    var selectedCurrencyFrom = "SGD"
     var selectedCurrencyTo by remember { mutableStateOf("") }
     var conversionResult by remember { mutableStateOf("") }
 
@@ -65,7 +72,7 @@ fun CurrencyConverterScreen() {
         Spacer(modifier = Modifier.height(16.dp))
         // Dropdown for 'To' currency
         CurrencyDropdownMenu(
-            currencyList,
+            currencyList = listOf("JPY"),
             selectedCurrencyTo,
             label = "To",
             onCurrencySelected = { selectedCurrencyTo = it }
@@ -74,8 +81,31 @@ fun CurrencyConverterScreen() {
         Spacer(modifier = Modifier.height(16.dp))
         // Convert button
         Button(onClick = {
-            // Perform conversion logic here
-            conversionResult = "Converted amount will be displayed here"
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = RetrofitInstance.api.getRates("SGD").execute()
+                if (response.isSuccessful && response.body() != null) {
+
+                    val rates = response.body()!!.data
+                    val rateToJPY = rates["JPY"] ?: 0.0
+
+                    withContext(Dispatchers.Main) {
+                        if (amount.isNotEmpty() && selectedCurrencyTo == "JPY") {
+                            val convertedAmount = amount.toDoubleOrNull()?.times(rateToJPY)
+                            conversionResult = if (convertedAmount != null)
+                                "Converted: $convertedAmount JPY"
+                            else
+                                "Invalid amount entered"
+                        } else {
+                            conversionResult = "Please enter an amount and select a currency"
+                        }
+                    }
+                } else {
+                    withContext(Dispatchers.Main) {
+                        conversionResult = "Error: ${response.code()} - ${response.message()}"
+                    }
+                }
+            }
+
         }) {
             Text("Convert")
         }

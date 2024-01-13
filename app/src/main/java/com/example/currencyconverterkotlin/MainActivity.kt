@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import com.example.currencyconverterkotlin.ui.screens.CurrencyConverterScreen
 import com.example.currencyconverterkotlin.ui.theme.CurrencyConverterKotlinTheme
 
+//https://freecurrencyapi.net/api/v2/latest?base_currency=SGD&apikey=f8fbdc40-5398-11ec-b8f1-757e371ba593
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,34 +49,6 @@ class MainActivity : ComponentActivity() {
 
                 }
             }
-
-
         }
     }
 }
-//@Composable
-//fun SimpleDropdownMenuExample() {
-//    var expanded by remember { mutableStateOf(false) }
-//    val items = listOf("Item 1", "Item 2", "Item 3")
-//    var selectedIndex by remember { mutableStateOf(0) }
-//
-//    Column(modifier = Modifier.padding(16.dp)) {
-//        Text("Selected item: ${items[selectedIndex]}",
-//            modifier = Modifier.clickable { expanded = true })
-//
-//        DropdownMenu(
-//            expanded = expanded,
-//            onDismissRequest = { expanded = false }
-//        ) {
-//            items.forEachIndexed { index, item ->
-//                DropdownMenuItem(
-//                    text = { Text(text=item) },
-//                    onClick = {
-//                        selectedIndex = index
-//                        expanded = false
-//                    }
-//                )
-//            }
-//        }
-//    }
-//}
